@@ -1,0 +1,58 @@
+package okno;
+import java.util.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import java.awt.Container;
+
+
+public class Okienko extends JFrame implements ActionListener {
+	private JButton button;
+	private TimerTask task;
+	int a,b,c;
+	public Okienko(){
+		setSize(600,600);
+		setTitle("Przycisk");
+		setLayout(null);
+		button = new JButton("P");
+		button.setBounds(100,100,100,40);
+		button.addActionListener(this);
+		add(button);
+		task= new TimerTask() {
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				button.setLocation(button.getLocation().x+a,button.getLocation().y+b);
+				System.out.println(button.getLocation().x);
+				System.out.println(c+"\n");
+				if(button.getLocation().x==c) {
+					this.cancel();
+					System.out.println("Zatrzymano");
+					
+				}
+				
+			}
+		};
+	}
+	public static void main(String[] arg){
+		Okienko okienko = new Okienko();
+		okienko.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		okienko.setVisible(true);
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		Random rand= new Random();
+		do {
+		a=(rand.nextInt(400)-200)/5;
+		} while(a==0);
+		c=a*5+100;
+		b=(rand.nextInt(400)-200)/5;
+		Timer timer = new Timer();
+		timer.scheduleAtFixedRate(task,500, 1000);
+		
+	}
+	
+}
