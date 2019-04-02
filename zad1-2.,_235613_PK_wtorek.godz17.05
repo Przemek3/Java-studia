@@ -1,32 +1,71 @@
 package okno;
 import java.util.*;
+import java.awt.Color;
+import java.awt.Rectangle;
+//import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
+import javax.swing.border.EmptyBorder;
 import javax.swing.JFrame;
-import java.awt.Container;
+import javax.swing.JPanel;
 
+//		schedule- metoda mówi, że harmonizujemy wykonanie tego zadania
+//		schedule- At Fixed Rate()
 
 public class Okienko extends JFrame implements ActionListener {
 	private JButton button;
+	private JPanel contentPane;
+
 	private TimerTask task;
-	int a,b,c;
+	//private JPanel pan;
+	int a,b,ile_ma_byc=0,ile_jest=0;
+	int nowe_miejsce_x, nowe_miejsce_y;
 	public Okienko(){
-		setSize(600,600);
+		
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 650, 650);
+		contentPane = new JPanel();
+		setContentPane(contentPane);
+		
+
 		setTitle("Przycisk");
 		setLayout(null);
 		button = new JButton("P");
 		button.setBounds(100,100,100,40);
+		nowe_miejsce_x=100;
+		nowe_miejsce_y=100;
 		button.addActionListener(this);
-		add(button);
+		
+		contentPane.setBackground(Color.red);
+		contentPane.add(button);
+		
+	}
+	
+	public static void main(String[] arg){
+		Okienko okienko = new Okienko();
+		//okienko.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		okienko.setVisible(true);
+	}
+	
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
 		task= new TimerTask() {
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
+				Rectangle r = contentPane.getBounds();
+				if(button.getLocation().x+a>0 && button.getLocation().x+a<r.width-20 && button.getLocation().y+b>0 && button.getLocation().y+b<r.height-20) {
 				button.setLocation(button.getLocation().x+a,button.getLocation().y+b);
-				System.out.println(button.getLocation().x);
-				System.out.println(c+"\n");
-				if(button.getLocation().x==c) {
+				}
+				else {
+					this.cancel();
+				}
+				//System.out.println(c+"\n");
+				ile_jest++;
+				if(ile_ma_byc<ile_jest) {
 					this.cancel();
 					System.out.println("Zatrzymano");
 					
@@ -34,22 +73,17 @@ public class Okienko extends JFrame implements ActionListener {
 				
 			}
 		};
-	}
-	public static void main(String[] arg){
-		Okienko okienko = new Okienko();
-		okienko.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		okienko.setVisible(true);
-	}
-	
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+
 		Random rand= new Random();
 		do {
-		a=(rand.nextInt(400)-200)/5;
-		} while(a==0);
-		c=a*5+100;
-		b=(rand.nextInt(400)-200)/5;
+		a=(rand.nextInt(1000)-500)/5;
+		}while(nowe_miejsce_x+5*a<0||nowe_miejsce_x+5*a>600);
+		nowe_miejsce_x=5*a+nowe_miejsce_x;
+		ile_ma_byc=ile_ma_byc+5;
+		do {
+		b=(rand.nextInt(1000)-500)/5;
+		}while(nowe_miejsce_y+5*b<0||nowe_miejsce_y+5*b>600);
+		nowe_miejsce_y=nowe_miejsce_y+5*b;
 		Timer timer = new Timer();
 		timer.scheduleAtFixedRate(task,500, 1000);
 		
